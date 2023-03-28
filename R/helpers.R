@@ -20,7 +20,6 @@ connect_to_sharepoint <- function(site_name = "ConnectedCommunitiesInsightsAnaly
   )
 
   return(sharepoint_site)
-
 }
 
 #' Make a Tidy Data Frame
@@ -38,4 +37,22 @@ get_tidy_table <- function(data_frame) {
     janitor::clean_names()
 
   return(tidy_table)
+}
+
+#' Get SharePoint List Values
+#'
+#' @param list_name The name of the SharePoint List you want to get
+#'
+#' @return A data frame
+#'
+#' @noRd
+get_list_items <- function(site_name, list_name) {
+  sharepoint_site <- connect_to_sharepoint(site_name)
+
+  sharepoint_list <- sharepoint_site$get_list(list_name)
+
+  list_item <- sharepoint_list$list_items() |>
+    get_tidy_table()
+
+  return(list_items)
 }

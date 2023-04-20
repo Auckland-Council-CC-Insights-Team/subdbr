@@ -56,3 +56,31 @@ get_list_items <- function(site_name, list_name) {
 
   return(list_items)
 }
+
+
+#' Title
+#'
+#' @param file_path
+#' @param file_format
+#'
+#' @return data from the file(s)
+#'
+#' @noRd
+read_file <- function(file_path, file_format = c("excel", "csv", "txt"))
+{
+  if(file_format == "excel")
+  {
+    data <- tere::get_excel_file(filename = paste0("/", file_path))
+  }
+
+  if(file_format == "csv")
+  {
+    data <- readr::read_csv(
+      file = paste0(tere::get_file_storage_path()
+                    , "/"
+                    , file_path)
+      )
+  }
+
+  return(data)
+}

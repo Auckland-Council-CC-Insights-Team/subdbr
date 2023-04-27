@@ -1,12 +1,19 @@
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
-})
-
 test_that("files are readable", {
-  file_path <- get0("excel_file", envir = asNamespace("subdbr"))
+  file_path <- test_path("testdata")
+  file_name = "test_file"
+
   expect_equal(
-    read_file(file_path, file_format = "excel") |>
+    read_file(file_name, file_path, file_format = "excel") |>
       nrow()
     , 37
     )
+
+  expect_equal(
+    read_file(file_name, file_path, file_format = "csv") |>
+      nrow()
+    , 37
+  )
+
 })
+
+

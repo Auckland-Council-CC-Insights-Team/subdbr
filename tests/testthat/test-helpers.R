@@ -16,4 +16,13 @@ test_that("files are readable", {
 
 })
 
+test_that("able to read beamafilm file", {
+  file_path <-test_path("testdata")
+  file_name = "?"
 
+  expect_equal(
+    read_beamafilm(file_name, files_path) |>
+      nrow()
+    , 12
+  )
+})

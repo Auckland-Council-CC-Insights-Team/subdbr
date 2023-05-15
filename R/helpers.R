@@ -89,11 +89,17 @@ read_file <- function(file_name, file_path = tere::get_file_storage_path(), file
 }
 
 
-read_beamafilm <- function()
+read_beamafilm <- function(file_name, file_path = tere::get_file_storage_path())
 {
-  # TODO figure out how to read from sharepoint
-  data_beamafilm <- read_file(file_name, file_path, file_format) |>
+  data_beamafilm <- tere::get_excel_file(
+    filename = paste0("/", file_name)
+    , path = file_path) |>
     janitor::clean_names
 
   return(data_beamafilm)
+}
+
+clean_beamafilm <- function()
+{
+
 }

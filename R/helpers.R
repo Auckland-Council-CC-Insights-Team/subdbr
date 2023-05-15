@@ -58,11 +58,11 @@ get_list_items <- function(site_name, list_name) {
 }
 
 
-#' Title
+#' Read Files
 #'
-#' @param file_name
-#' @param file_path
-#' @param file_format
+#' @param file_name The name of the file
+#' @param file_path The path of the file
+#' @param file_format the format of the file
 #'
 #' @return data from the file(s)
 #'
@@ -86,4 +86,14 @@ read_file <- function(file_name, file_path = tere::get_file_storage_path(), file
   }
 
   return(data)
+}
+
+
+read_beamafilm <- function()
+{
+  # TODO figure out how to read from sharepoint
+  data_beamafilm <- read_file(file_name, file_path, file_format) |>
+    janitor::clean_names
+
+  return(data_beamafilm)
 }

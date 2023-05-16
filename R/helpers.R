@@ -113,6 +113,21 @@ read_beamafilm <- function(file_name
   return(data_beamafilm)
 }
 
+prepare_beamafilm <- function()
+{
+  file_name_beamafilm <- fs::dir_ls("beamafilm") |>
+    stringr::word(start = -2, end = -1, sep = stringr::fixed("/"))
+
+  data_beamafilm <- read_file(
+    file_name = file_name_beamafilm
+    , file_format = "excel"
+    )
+
+}
+
+
+
+
 
 #' Prepare beamafilm data
 #'

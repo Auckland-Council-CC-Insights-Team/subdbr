@@ -57,6 +57,9 @@ get_list_items <- function(site_name, list_name) {
   return(list_items)
 }
 
+# TODO figure out best way to read in files
+# 1 function vs separate functions for each data source
+
 
 #' Read Files
 #'
@@ -67,7 +70,9 @@ get_list_items <- function(site_name, list_name) {
 #' @return data from the file(s)
 #'
 #' @noRd
-read_file <- function(file_name, file_path = tere::get_file_storage_path(), file_format = c("excel", "csv", "txt"))
+read_file <- function(file_name
+                      , file_path = tere::get_file_storage_path()
+                      , file_format = c("excel", "csv", "txt"))
 {
   if(file_format == "excel")
   {
@@ -89,7 +94,16 @@ read_file <- function(file_name, file_path = tere::get_file_storage_path(), file
 }
 
 
-read_beamafilm <- function(file_name, file_path = tere::get_file_storage_path())
+#' Read beamafilm file into dataframe
+#'
+#' @param file_name The name of the file
+#' @param file_path The path of the file
+#'
+#' @return A dataframe containing all beamafilm data
+#'
+#' @noRd
+read_beamafilm <- function(file_name
+                           , file_path = tere::get_file_storage_path())
 {
   data_beamafilm <- tere::get_excel_file(
     filename = paste0("/", file_name)
@@ -99,7 +113,30 @@ read_beamafilm <- function(file_name, file_path = tere::get_file_storage_path())
   return(data_beamafilm)
 }
 
-clean_beamafilm <- function()
+
+#' Prepare beamafilm data
+#'
+#' @param data_beamafilm
+#'
+#' @return A clean dataframe containing beamafilm data
+#'
+#' @noRd
+clean_beamafilm <- function(data_beamafilm)
 {
 
+  clean_beamafilm <- data_beamafilm |>
+    mutate(srn = "b37164934") |>
+    mutate(reporting_period = ymd(paste0(year, month, "01"))) |>
+    mutate(month = month(reporting_period, label = TRUE, abbr = FALSE)) |>
+    mutate(year = year(reporting_period)) |>
+    mutate(metric_name = "Views") |>
+    mutate(value = click) |>
+    select(srn
+           , reporting_period
+           , metric_name
+           , value
+           , month
+           , year)
+
+  return(clean_beamafilm)
 }

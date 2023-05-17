@@ -123,22 +123,6 @@ prepare_beamafilm <- function()
     , file_format = "excel"
     )
 
-}
-
-
-
-
-
-#' Prepare beamafilm data
-#'
-#' @param data_beamafilm
-#'
-#' @return A clean dataframe containing beamafilm data
-#'
-#' @noRd
-clean_beamafilm <- function(data_beamafilm)
-{
-
   clean_beamafilm <- data_beamafilm |>
     mutate(srn = "b37164934") |>
     mutate(reporting_period = ymd(paste0(year, month, "01"))) |>
@@ -154,4 +138,7 @@ clean_beamafilm <- function(data_beamafilm)
            , year)
 
   return(clean_beamafilm)
+
 }
+
+

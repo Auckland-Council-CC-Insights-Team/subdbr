@@ -1,16 +1,18 @@
 
-save_excel_file <- function(dir_name, test_data, file_name)
+save_excel_file <- function(test_data, file_name)
 {
 
   file_path <- paste0(testthat::test_path("testdata")
                       , "/"
-                      , dir_name)
+                      , file_name)
 
   dir.create(file_path)
 
-  writexl::write_xlsx(test_data, path = file_path)
+  writexl::write_xlsx(test_data, path = paste0(file_path, "/", file_name, ".xlsx"))
 
-  data <- readxl::read_excel(paste0(file_path,"/", file_name))
+  data <- readxl::read_excel(
+    paste0(file_path,"/", file_name, ".xlsx")
+    )
 
   return(data)
 }
@@ -49,24 +51,26 @@ test_data_excel <- list(beamafilm)
 
 test_data_csv <- list(linked_in_learning)
 
-dir_name_excel <- c("beamafilm")
-
 #TODO csv
 
 file_name_excel <- c("beamafilm")
 
 file_name_csv <- c("linked_in_learning")
 
-# file_path_csv <-
+purrr::map2(
+  .x = test_data_excel,
+  .y = file_name_excel,
+  .f = save_excel_file
+)
 
-purrr::pmap(
-  list(
-    dir_name_excel,
-    test_data_excel,
-    file_name_excel
-  )
-  , ~save_excel_file(..1 = dir_name_excel, ..2 = test_data_excel, ..3 = file_name_excel)
-  )
+# purrr::pmap(
+#   list(
+#     dir_name_excel,
+#     test_data_excel,
+#     file_name_excel
+#   )
+#   , ~save_excel_file(..1 = dir_name_excel, ..2 = test_data_excel, ..3 = file_name_excel)
+#   )
 
 # purrr::walk2(
 #   test_data_csv

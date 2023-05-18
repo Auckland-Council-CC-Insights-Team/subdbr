@@ -128,7 +128,7 @@ prepare_beamafilm <- function()
     mutate(reporting_period = ymd(paste0(year, month, "01"))) |>
     mutate(month = month(reporting_period, label = TRUE, abbr = FALSE)) |>
     mutate(year = year(reporting_period)) |>
-    mutate(metric_name = "Views") |>
+    mutate(metric_name = "views") |>
     mutate(value = click) |>
     select(srn
            , reporting_period

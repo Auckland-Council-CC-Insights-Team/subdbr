@@ -27,3 +27,17 @@ linked_in_learning <- dplyr::tibble(
 
 # TODO figure out where to put this function
 # writexl::write_excel(beamafilm, test_path("testdata", "beamafilm.xlsx"))
+
+test_data_excel <- list(beamafilm)
+
+test_data_csv <- list(linked_in_learning)
+
+file_name_excel <- c("beamafilm")
+
+file_name_csv <- c("linked_in_learning")
+
+purrr::walk2(
+  test_data_excel
+  , file_name_excel
+  , ~writexl::write_xlsx(x = .x, path = .y))
+

@@ -16,12 +16,12 @@ test_that("files are readable", {
 
 })
 
-test_that("able to read beamafilm file", {
+test_that("able to complete ETL process for beamafilm", {
   file_path <-test_path("R")
   file_name = "DATASET.R"
 
   expect_equal(
-    read_beamafilm(file_name, files_path) |>
+    prepare_beamafilm() |>
       nrow()
     , 12
   )

@@ -1,3 +1,20 @@
+
+save_excel_file <- function(dir_name, test_data, file_name)
+{
+
+  file_path <- paste0(testthat::test_path("testdata")
+                      , "/"
+                      , dir_name)
+
+  dir.create(file_path)
+
+  writexl::write_xlsx(test_data, path = file_path)
+
+  data <- readxl::read_excel(paste0(file_path,"/", file_name))
+
+  return(data)
+}
+
 beamafilm <- dplyr::tibble(
   "Customer" = rep("Auckland Council", 12)
   , "Resource" = rep("Beamafilm", 12)
@@ -32,12 +49,26 @@ test_data_excel <- list(beamafilm)
 
 test_data_csv <- list(linked_in_learning)
 
+dir_name_excel <- c("beamafilm")
+
+#TODO csv
+
 file_name_excel <- c("beamafilm")
 
 file_name_csv <- c("linked_in_learning")
 
-purrr::walk2(
-  test_data_excel
-  , file_name_excel
-  , ~writexl::write_xlsx(x = .x, path = .y))
+# file_path_csv <-
 
+purrr::pmap(
+  list(
+    dir_name_excel,
+    test_data_excel,
+    file_name_excel
+  )
+  , ~save_excel_file(..1 = dir_name_excel, ..2 = test_data_excel, ..3 = file_name_excel)
+  )
+
+# purrr::walk2(
+#   test_data_csv
+#   , file_name_csv
+#   , ~readr::write_csv(x = .x, file = .y))

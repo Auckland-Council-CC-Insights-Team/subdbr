@@ -77,17 +77,3 @@ purrr::map2(
   .y = file_name_csv,
   .f = save_file_csv
 )
-
-# purrr::pmap(
-#   list(
-#     dir_name_excel,
-#     test_data_excel,
-#     file_name_excel
-#   )
-#   , ~save_excel_file(..1 = dir_name_excel, ..2 = test_data_excel, ..3 = file_name_excel)
-#   )
-
-# purrr::walk2(
-#   test_data_csv
-#   , file_name_csv
-#   , ~readr::write_csv(x = .x, file = .y))

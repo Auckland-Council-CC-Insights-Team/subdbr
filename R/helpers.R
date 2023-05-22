@@ -77,7 +77,8 @@ read_file <- function(file_name
   if(file_format == "excel")
   {
     data <- tere::get_excel_file(
-      filename = paste0("/", file_name),
+      # filename = paste0("/", file_name),
+      filename = file_name,
       path = file_path
       )
   }
@@ -93,29 +94,37 @@ read_file <- function(file_name
   return(data)
 }
 
+get_file_name <- function(file_path = tere::get_file_storage_path(), folder_name)
+{
+  file_name <- fs::dir_ls(paste0(file_path, folder_name)) |>
+    stringr::word(start = -2, end = -1, sep = stringr::fixed("/")) |>
+    stringr::word(1, sep = stringr::fixed("."))
+
+  return(file_name)
+}
 
 #' Prepare beamafilm data
 #'
-#' @param
+#' @param file_path The path of the file
 #'
 #' @return A dataframe containing all beamafilm data
 #'
 #' @noRd
-prepare_beamafilm <- function()
+prepare_beamafilm <- function(file_path = tere::get_file_storage_path())
 {
-  file_name_beamafilm <- fs::dir_ls("beamafilm") |>
-    stringr::word(start = -2, end = -1, sep = stringr::fixed("/"))
+  file_name_beamafilm <- get_file_name(file_path, "/beamafilm")
 
   data_beamafilm <- read_file(
     file_name = file_name_beamafilm
+    , file_path = file_path
     , file_format = "excel"
     )
 
   clean_beamafilm <- data_beamafilm |>
     mutate(srn = "b37164934") |>
-    mutate(reporting_period = ymd(paste0(year, month, "01"))) |>
-    mutate(month = month(reporting_period, label = TRUE, abbr = FALSE)) |>
-    mutate(year = year(reporting_period)) |>
+    mutate(reporting_period = lubridate::ymd(paste0(year, month, "01"))) |>
+    mutate(month = lubridate::month(reporting_period, label = TRUE, abbr = FALSE)) |>
+    mutate(year = lubridate::year(reporting_period)) |>
     mutate(metric_name = "views") |>
     mutate(value = click) |>
     select(srn

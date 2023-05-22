@@ -1,7 +1,6 @@
 
-save_excel_file <- function(test_data, file_name)
+save_file_excel <- function(test_data, file_name)
 {
-
   file_path <- paste0(testthat::test_path("testdata")
                       , "/"
                       , file_name)
@@ -10,9 +9,22 @@ save_excel_file <- function(test_data, file_name)
 
   writexl::write_xlsx(test_data, path = paste0(file_path, "/", file_name, ".xlsx"))
 
-  data <- readxl::read_excel(
-    paste0(file_path,"/", file_name, ".xlsx")
-    )
+  data <- readxl::read_excel(paste0(file_path,"/", file_name, ".xlsx"))
+
+  return(data)
+}
+
+save_file_csv <- function(test_data, file_name)
+{
+  file_path <- paste0(testthat::test_path("testdata")
+                      , "/"
+                      , file_name)
+
+  dir.create(file_path)
+
+  readr::write_csv(test_data, path = paste0(file_path, "/", file_name, ".csv"))
+
+  data <- readr::read_csv(paste0(file_path, "/", file_name, ".csv"))
 
   return(data)
 }
@@ -57,7 +69,13 @@ file_name_csv <- c("linked_in_learning")
 purrr::map2(
   .x = test_data_excel,
   .y = file_name_excel,
-  .f = save_excel_file
+  .f = save_file_excel
+)
+
+purrr::map2(
+  .x = test_data_csv,
+  .y = file_name_csv,
+  .f = save_file_csv
 )
 
 # purrr::pmap(

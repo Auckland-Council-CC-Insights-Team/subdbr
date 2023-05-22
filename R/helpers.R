@@ -94,25 +94,13 @@ read_file <- function(file_name
 }
 
 
-#' Read beamafilm file into dataframe
+#' Prepare beamafilm data
 #'
-#' @param file_name The name of the file
-#' @param file_path The path of the file
+#' @param
 #'
 #' @return A dataframe containing all beamafilm data
 #'
 #' @noRd
-read_beamafilm <- function(file_name
-                           , file_path = tere::get_file_storage_path())
-{
-  data_beamafilm <- tere::get_excel_file(
-    filename = paste0("/", file_name)
-    , path = file_path) |>
-    janitor::clean_names
-
-  return(data_beamafilm)
-}
-
 prepare_beamafilm <- function()
 {
   file_name_beamafilm <- fs::dir_ls("beamafilm") |>

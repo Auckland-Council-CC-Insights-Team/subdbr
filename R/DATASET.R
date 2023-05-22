@@ -44,9 +44,6 @@ linked_in_learning <- dplyr::tibble(
   , "Document Completions" = 13
 )
 
-# TODO figure out where to put this function
-# writexl::write_excel(beamafilm, test_path("testdata", "beamafilm.xlsx"))
-
 test_data_excel <- list(beamafilm)
 
 test_data_csv <- list(linked_in_learning)

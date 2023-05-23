@@ -1,4 +1,6 @@
 
+# create file directory and file
+
 save_file_excel <- function(test_data, file_name)
 {
   file_path <- paste0(testthat::test_path("testdata")
@@ -29,6 +31,8 @@ save_file_csv <- function(test_data, file_name)
   return(data)
 }
 
+# create test data frames
+
 beamafilm <- dplyr::tibble(
   "Customer" = rep("Auckland Council", 12)
   , "Resource" = rep("Beamafilm", 12)
@@ -56,15 +60,19 @@ linked_in_learning <- dplyr::tibble(
   , "Document Completions" = 13
 )
 
+# assign data frames to a list
+
 test_data_excel <- list(beamafilm)
 
 test_data_csv <- list(linked_in_learning)
 
-#TODO csv
+# assign files to a vector
 
 file_name_excel <- c("beamafilm")
 
 file_name_csv <- c("linked_in_learning")
+
+#
 
 purrr::map2(
   .x = test_data_excel,

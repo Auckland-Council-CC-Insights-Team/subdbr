@@ -78,16 +78,16 @@ read_file <- function(file_name
   {
     data <- tere::get_excel_file(
       # filename = paste0("/", file_name),
-      filename = file_name,
-      path = file_path
+      filename = file_name
+      , path = file_path
       )
   }
 
   if(file_format == "csv")
   {
     data <- readr::read_csv(
-      file = paste0(file_path, "/", file_name, ".csv"),
-      col_types = "?"
+      file = paste0(file_path, "/", file_name, ".csv")
+      , col_types = "?"
       )
   }
 
@@ -121,18 +121,18 @@ prepare_beamafilm <- function(file_path = tere::get_file_storage_path())
     )
 
   clean_beamafilm <- data_beamafilm |>
-    dplyr::mutate(srn = "b37164934") |>
+    dplyr::mutate(sierra_record_number = "b37164934") |>
     dplyr::mutate(reporting_period = lubridate::ymd(paste0(year, month, "01"))) |>
     dplyr::mutate(month = lubridate::month(reporting_period, label = TRUE, abbr = FALSE)) |>
     dplyr::mutate(year = lubridate::year(reporting_period)) |>
     dplyr::mutate(metric_name = "views") |>
     dplyr::mutate(value = click) |>
-    dplyr::select(srn
-           , reporting_period
-           , metric_name
-           , value
-           , month
-           , year)
+    dplyr::select(sierra_record_number
+                  , reporting_period
+                  , metric_name
+                  , value
+                  , month
+                  , year)
 
   return(clean_beamafilm)
 

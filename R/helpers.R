@@ -121,13 +121,13 @@ prepare_beamafilm <- function(file_path = tere::get_file_storage_path())
     )
 
   clean_beamafilm <- data_beamafilm |>
-    mutate(srn = "b37164934") |>
-    mutate(reporting_period = lubridate::ymd(paste0(year, month, "01"))) |>
-    mutate(month = lubridate::month(reporting_period, label = TRUE, abbr = FALSE)) |>
-    mutate(year = lubridate::year(reporting_period)) |>
-    mutate(metric_name = "views") |>
-    mutate(value = click) |>
-    select(srn
+    dplyr::mutate(srn = "b37164934") |>
+    dplyr::mutate(reporting_period = lubridate::ymd(paste0(year, month, "01"))) |>
+    dplyr::mutate(month = lubridate::month(reporting_period, label = TRUE, abbr = FALSE)) |>
+    dplyr::mutate(year = lubridate::year(reporting_period)) |>
+    dplyr::mutate(metric_name = "views") |>
+    dplyr::mutate(value = click) |>
+    dplyr::select(srn
            , reporting_period
            , metric_name
            , value

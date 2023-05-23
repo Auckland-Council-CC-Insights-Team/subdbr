@@ -65,16 +65,16 @@ get_list_items <- function(site_name, list_name) {
 #'
 #' @param file_name The name of the file
 #' @param file_path The path of the file
-#' @param file_format the format of the file
+#' @param file_type the format of the file
 #'
 #' @return data from the file(s)
 #'
 #' @noRd
 read_file <- function(file_name
                       , file_path = tere::get_file_storage_path()
-                      , file_format = c("excel", "csv", "txt"))
+                      , file_type = c("excel", "csv", "txt"))
 {
-  if(file_format == "excel")
+  if(file_type == "excel")
   {
     data <- tere::get_excel_file(
       # filename = paste0("/", file_name),
@@ -83,7 +83,7 @@ read_file <- function(file_name
       )
   }
 
-  if(file_format == "csv")
+  if(file_type == "csv")
   {
     data <- readr::read_csv(
       file = paste0(file_path, "/", file_name, ".csv")
@@ -117,7 +117,7 @@ prepare_beamafilm <- function(file_path = tere::get_file_storage_path())
   data_beamafilm <- read_file(
     file_name = file_name_beamafilm
     , file_path = file_path
-    , file_format = "excel"
+    , file_type = "excel"
     )
 
   clean_beamafilm <- data_beamafilm |>

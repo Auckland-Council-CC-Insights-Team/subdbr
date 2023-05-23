@@ -3,13 +3,13 @@ test_that("files are readable", {
   file_name = "test_file"
 
   expect_equal(
-    read_file(file_name, file_path, file_format = "excel") |>
+    read_file(file_name, file_path, file_type = "excel") |>
       nrow()
     , 37
     )
 
   expect_equal(
-    read_file(file_name, file_path, file_format = "csv") |>
+    read_file(file_name, file_path, file_type = "csv") |>
       nrow()
     , 37
   )

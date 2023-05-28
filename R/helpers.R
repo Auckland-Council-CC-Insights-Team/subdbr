@@ -144,4 +144,36 @@ prepare_beamafilm <- function(file_path = tere::get_file_storage_path())
 
 }
 
+#' Prepare discovery national archives data
+#'
+#' @param file_path The path of the file
+#'
+#' @return A dataframe containing all beamafilm data
+#'
+#' @noRd
+prepare_discovery_national_archives <- function(file_path = tere::get_file_storage_path())
+{
+  file_name_discovery_national_archives <- get_file_name(file_path, "/discovery_national_archives")
 
+  data_discovery_national_archives <- read_file(
+    file_name = file_name_discovery_national_archives
+    , file_path = file_path
+    , file_type = "excel"
+  )
+
+  clean_discovery_national_archives <- data_discovery_national_archives |>
+    dplyr::mutate(sierra_record_number = "b36127334") |>
+    dplyr::mutate(reporting_period = lubridate::ymd(paste0(year, month, "01"))) |>
+    dplyr::mutate(month = lubridate::month(reporting_period, label = TRUE, abbr = FALSE)) |>
+    dplyr::mutate(year = lubridate::year(reporting_period)) |>
+    dplyr::mutate(metric_name = "Views") |>
+    dplyr::mutate(value = click) |>
+    dplyr::mutate(sierra_record_number
+                  , reporting_period
+                  , metric_name
+                  , value
+                  , month
+                  , year)
+
+  return(clean_discovery_national_archives)
+}

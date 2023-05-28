@@ -91,10 +91,11 @@ read_file <- function(file_name
     data <- purrr::map(
       .x = paste0(file_path, "/", file_name, ".csv")
       , .f = ~readr::read_delim(file = .x
-                                , delim = ",")
-      # , .id = "file_name"
+                                , delim = ","
+                                , col_types = "?")
     ) |>
-      list_rbind()
+      list_rbind() |>
+      clean_names()
   }
 
   return(data)
@@ -177,3 +178,4 @@ prepare_discovery_national_archives <- function(file_path = tere::get_file_stora
 
   return(clean_discovery_national_archives)
 }
+

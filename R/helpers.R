@@ -72,23 +72,29 @@ get_list_items <- function(site_name, list_name) {
 #' @noRd
 read_file <- function(file_name
                       , file_path = tere::get_file_storage_path()
-                      , file_type = c("excel", "csv", "txt"))
+                      , file_type = c("excel", "csv", "txt")
+                      , sheet = 1)
 {
   if(file_type == "excel")
   {
-    data <- tere::get_excel_file(
-      # filename = paste0("/", file_name),
-      filename = file_name
-      , path = file_path
-      )
+    data <- purrr::map(
+      .x = file_name
+      , .f = ~tere::get_excel_file(filename = .x
+                                   , path = file_path
+                                   , sheet = sheet)
+    ) |>
+      list_rbind()
   }
 
   if(file_type == "csv")
   {
-    data <- readr::read_csv(
-      file = paste0(file_path, "/", file_name, ".csv")
-      , col_types = "?"
-      )
+    data <- purrr::map(
+      .x = paste0(file_path, "/", file_name, ".csv")
+      , .f = ~readr::read_delim(file = .x
+                                , delim = ",")
+      # , .id = "file_name"
+    ) |>
+      list_rbind()
   }
 
   return(data)

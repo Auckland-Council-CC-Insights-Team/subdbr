@@ -25,12 +25,22 @@ test_that("able to get file name", {
   )
 })
 
-test_that("able to complete ETL process for beamafilm", {
+test_that("able to complete prepare data for beamafilm", {
   file_path <-test_path("testdata")
 
   expect_equal(
     prepare_beamafilm(file_path) |>
       nrow()
     , 12
+  )
+})
+
+test_that("able to complete prepare data for linked_in_learning", {
+  file_path <-test_path("testdata")
+
+  expect_equal(
+    prepare_linked_in_learning(file_path) |>
+      nrow()
+    , 1
   )
 })

@@ -83,7 +83,7 @@ read_file <- function(file_name
                                    , path = file_path
                                    , sheet = sheet)
     ) |>
-      list_rbind()
+      purrr::list_rbind()
   }
 
   if(file_type == "csv")
@@ -94,8 +94,8 @@ read_file <- function(file_name
                                 , delim = ","
                                 , col_types = "?")
     ) |>
-      list_rbind() |>
-      clean_names()
+      purrr::list_rbind() |>
+      janitor::clean_names()
   }
 
   return(data)

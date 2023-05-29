@@ -149,7 +149,7 @@ prepare_beamafilm <- function(file_path = tere::get_file_storage_path())
 #'
 #' @param file_path The path of the file
 #'
-#' @return A dataframe containing all beamafilm data
+#' @return A dataframe containing all discovery national archives data
 #'
 #' @noRd
 prepare_discovery_national_archives <- function(file_path = tere::get_file_storage_path())
@@ -177,5 +177,57 @@ prepare_discovery_national_archives <- function(file_path = tere::get_file_stora
                   , year)
 
   return(clean_discovery_national_archives)
+}
+
+#' Prepare linked in learning data
+#'
+#' @param file_path The path of the file
+#'
+#' @return A dataframe containing all linked in learning data
+#'
+#' @noRd
+prepare_linked_in_learning <- function(file_path = "data-raw")
+{
+  file_name_linked_in_learning <- get_file_name(file_path, "/linked_in_learning")
+
+  data_linked_in_learning <- read_file(
+    file_name = file_name_linked_in_learning
+    , file_path = file_path
+    , file_type = "csv"
+  )
+
+  clean_linked_in_learning <- data_linked_in_learning |>
+    dplyr::select(
+      end_day_pst_pdt
+      , people_logged_in
+      , course_views
+      , courses_viewed
+    ) |>
+    tidyr::pivot_longer(cols = c(
+      people_logged_in
+      , course_views
+      , courses_viewed)
+      , names_to = "metric_name"
+      , values_to = "value") |>
+    dplyr::mutate(
+      sierra_record_number = "b31669840"
+      , reporting_period = lubridate::mdy(end_day_pst_pdt)
+      , month = lubridate::month(reporting_period, label = TRUE, abbr = FALSE)
+      , year = lubridate::year(reporting_period)
+      , metric_name = dplyr::case_when(
+        metric_name == "people_logged_in" ~ "sessions"
+        , metric_name == "courses_viewed" ~ "views"
+        , metric_name == "course_views" ~ "views"
+      )) |>
+    dplyr::filter(!is.na(value)) |>
+    dplyr::select(sierra_record_number
+                  , reporting_period
+                  , metric_name
+                  , value
+                  , month
+                  , year) |>
+    dplyr::arrange(reporting_period)
+
+  return(clean_linked_in_learning)
 }
 

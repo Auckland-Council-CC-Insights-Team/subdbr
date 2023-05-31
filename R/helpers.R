@@ -57,17 +57,15 @@ get_list_items <- function(site_name, list_name) {
   return(list_items)
 }
 
-# TODO figure out best way to read in files
-# 1 function vs separate functions for each data source
-
 
 #' Read Files
 #'
 #' @param file_name The name of the file
 #' @param file_path The path of the file
-#' @param file_type the format of the file
+#' @param file_type The format of the file
+#' @param sheet The sheet number in the excel file. Defaults to the first sheet
 #'
-#' @return data from the file(s)
+#' @return Data from the file(s)
 #'
 #' @noRd
 read_file <- function(file_name
@@ -101,6 +99,14 @@ read_file <- function(file_name
   return(data)
 }
 
+#' Get File Name
+#'
+#' @param file_path The path of the file
+#' @param folder_name The name of the folder
+#'
+#' @return The name of the file(s)
+#'
+#' @noRd
 get_file_name <- function(file_path = tere::get_file_storage_path(), folder_name)
 {
   file_name <- fs::dir_ls(paste0(file_path, folder_name)) |>

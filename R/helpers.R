@@ -41,7 +41,9 @@ get_tidy_table <- function(data_frame) {
 
 #' Get SharePoint List Values
 #'
-#' @param list_name The name of the SharePoint List you want to get
+#' @param site_name The name of the SharePoint site to which you wish to
+#'   connect, which can be found in the site's homepage URL.
+#' @param list_name The name of the SharePoint List you wish to retrieve.
 #'
 #' @return A data frame
 #'
@@ -192,7 +194,7 @@ prepare_discovery_national_archives <- function(file_path = tere::get_file_stora
 #' @return A dataframe containing all linked in learning data
 #'
 #' @noRd
-prepare_linked_in_learning <- function(file_path = "data-raw")
+prepare_linked_in_learning <- function(file_path = tere::get_file_storage_path())
 {
   file_name_linked_in_learning <- get_file_name(file_path, "/linked_in_learning")
 
@@ -202,17 +204,19 @@ prepare_linked_in_learning <- function(file_path = "data-raw")
     , file_type = "csv"
   )
 
+  #TODO figure out to handle old column name courses_viewed in oldest files
   clean_linked_in_learning <- data_linked_in_learning |>
     dplyr::select(
       end_day_pst_pdt
       , people_logged_in
       , course_views
-      , courses_viewed
+      # , courses_viewed
     ) |>
     tidyr::pivot_longer(cols = c(
       people_logged_in
       , course_views
-      , courses_viewed)
+      # , courses_viewed
+      )
       , names_to = "metric_name"
       , values_to = "value") |>
     dplyr::mutate(
@@ -222,8 +226,8 @@ prepare_linked_in_learning <- function(file_path = "data-raw")
       , year = lubridate::year(reporting_period)
       , metric_name = dplyr::case_when(
         metric_name == "people_logged_in" ~ "sessions"
-        , metric_name == "courses_viewed" ~ "views"
         , metric_name == "course_views" ~ "views"
+        # , metric_name == "courses_viewed" ~ "views"
       )) |>
     dplyr::filter(!is.na(value)) |>
     dplyr::select(sierra_record_number

@@ -44,8 +44,8 @@ beamafilm <- dplyr::tibble(
 
 
 linked_in_learning <- dplyr::tibble(
-  "Start Day" = "2022-02-28"
-  , "End Day" = "2022-03-31"
+  "Start Day (PST/PDT)" = "2022-02-28"
+  , "End Day (PST/PDT)" = "2022-03-31"
   , "People Logged In" = 1
   , "Unique Viewers" = 2
   , "Hours Viewed" = 3

@@ -1,64 +1,63 @@
-#' Connect to a SharePoint Site
+#' #' Connect to a SharePoint Site
+#' #'
+#' #' @param site_name The name of the SharePoint site to which you wish to
+#' #'   connect, which can be found in the site's homepage URL.
+#' #'
+#' #' @return An R6 object of class ms_site.
+#' #'
+#' #' @noRd
+#' connect_to_sharepoint <- function(site_name = "ConnectedCommunitiesInsightsAnalysisTeam") {
 #'
-#' @param site_name The name of the SharePoint site to which you wish to
-#'   connect, which can be found in the site's homepage URL.
+#'   withr::local_options(list(microsoft365r_use_cli_app_id = TRUE
+#'                             , warn = -1
+#'                             )
+#'                        )
 #'
-#' @return An R6 object of class ms_site.
+#'   sharepoint_site <- Microsoft365R::get_sharepoint_site(
+#'     site_url = paste0("https://aklcouncil.sharepoint.com/sites/"
+#'                       , site_name)
+#'     , app = "04b07795-8ddb-461a-bbee-02f9e1bf7b46"
+#'   )
 #'
-#' @noRd
-connect_to_sharepoint <- function(site_name = "ConnectedCommunitiesInsightsAnalysisTeam") {
-
-  withr::local_options(list(microsoft365r_use_cli_app_id = TRUE
-                            , warn = -1
-                            )
-                       )
-
-  sharepoint_site <- Microsoft365R::get_sharepoint_site(
-    site_url = paste0("https://aklcouncil.sharepoint.com/sites/"
-                      , site_name)
-    , app = "04b07795-8ddb-461a-bbee-02f9e1bf7b46"
-  )
-
-  return(sharepoint_site)
-}
-
-#' Make a Tidy Data Frame
+#'   return(sharepoint_site)
+#' }
 #'
-#' @description Convert a data frame into a tibble and clean the column names.
+#' #' Make a Tidy Data Frame
+#' #'
+#' #' @description Convert a data frame into a tibble and clean the column names.
+#' #'
+#' #' @param data_frame The data frame that needs to be tidied.
+#' #'
+#' #' @return A tibble with the same number of columns and rows as the original data drame.
+#' #'
+#' #' @noRd
+#' get_tidy_table <- function(data_frame) {
+#'   tidy_table <- data_frame |>
+#'     dplyr::as_tibble() |>
+#'     janitor::clean_names()
 #'
-#' @param data_frame The data frame that needs to be tidied.
+#'   return(tidy_table)
+#' }
 #'
-#' @return A tibble with the same number of columns and rows as the original data drame.
+#' #' Get SharePoint List Values
+#' #'
+#' #' @param site_name The name of the SharePoint site to which you wish to
+#' #'   connect, which can be found in the site's homepage URL.
+#' #' @param list_name The name of the SharePoint List you wish to retrieve.
+#' #'
+#' #' @return A data frame
+#' #'
+#' #' @noRd
+#' get_list_items <- function(site_name, list_name) {
+#'   sharepoint_site <- connect_to_sharepoint(site_name)
 #'
-#' @noRd
-get_tidy_table <- function(data_frame) {
-  tidy_table <- data_frame |>
-    dplyr::as_tibble() |>
-    janitor::clean_names()
-
-  return(tidy_table)
-}
-
-#' Get SharePoint List Values
+#'   sharepoint_list <- sharepoint_site$get_list(list_name)
 #'
-#' @param site_name The name of the SharePoint site to which you wish to
-#'   connect, which can be found in the site's homepage URL.
-#' @param list_name The name of the SharePoint List you wish to retrieve.
+#'   list_item <- sharepoint_list$list_items() |>
+#'     get_tidy_table()
 #'
-#' @return A data frame
-#'
-#' @noRd
-get_list_items <- function(site_name, list_name) {
-  sharepoint_site <- connect_to_sharepoint(site_name)
-
-  sharepoint_list <- sharepoint_site$get_list(list_name)
-
-  list_item <- sharepoint_list$list_items() |>
-    get_tidy_table()
-
-  return(list_items)
-}
-
+#'   return(list_items)
+#' }
 
 #' Read Files
 #'
@@ -116,6 +115,66 @@ get_file_name <- function(file_path = tere::get_file_storage_path(), folder_name
     stringr::word(1, sep = stringr::fixed("."))
 
   return(file_name)
+}
+
+#' Get register data from ms lists
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_data_ms_lists <- function()
+{
+  data_ms_lists <- tere::get_list_items(
+    "ConnectedCommunitiesInsightsAnalysisTeam"
+    , "Libraries Subscription Databases Register") |>
+    janitor::clean_names()
+
+  return(data_ms_lists)
+}
+
+#' Prepare subscription database information table
+#'
+#' @return A dataframe used for producing a file for reporting
+#'
+#' @noRd
+prepare_subscription_database_info <- function()
+{
+  data_ms_lists <- get_data_ms_lists()
+
+  subscription_database_info <- data_ms_lists |>
+    dplyr::select(
+      sierra_record_number
+      , database_name = title
+      , vendor
+      , package
+      , subscription_status = subscribed
+    ) |>
+    dplyr::filter(!is.na(sierra_record_number)) |>
+    dplyr::distinct(sierra_record_number, .keep_all = TRUE)
+
+  return(subscription_database_info)
+}
+
+#' Prepare subscription database price table
+#'
+#' @return A dataframe used for producing a file for reporting
+#'
+#' @noRd
+prepare_subscription_database_price <- function()
+{
+  data_ms_lists <- get_data_ms_lists()
+
+  subscription_database_price <- data_ms_lists |>
+    dplyr::select(
+      sierra_record_number
+      , price_type
+      , price
+    ) |>
+    dplyr::filter(!is.na(sierra_record_number)) |>
+    dplyr::distinct(sierra_record_number, .keep_all = TRUE)
+
+  return(subscription_database_price)
 }
 
 #' Prepare beamafilm data

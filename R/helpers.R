@@ -300,3 +300,29 @@ prepare_linked_in_learning <- function(file_path = tere::get_file_storage_path()
   return(clean_linked_in_learning)
 }
 
+
+#' Prepare integrated dataset
+#'
+#' @return A dataframe containing datasets from all data sources
+#'
+#' @noRd
+prepare_integrated_dataset <- function()
+{
+
+  clean_linked_in_learning <- prepare_linked_in_learning()
+
+  clean_beamafilm <- prepare_beamafilm()
+
+  clean_discovery_national_archives <- prepare_discovery_national_archives()
+
+  # clean_form_metric <- prepare_form_metric()
+
+  integrated_dataset <- dplyr::bind_rows(
+    clean_linked_in_learning
+    , clean_beamafilm
+    , clean_discovery_national_archives
+    # , clean_form_metric
+  )
+
+  return(integrated_dataset)
+}

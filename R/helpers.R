@@ -59,6 +59,23 @@
 #'   return(list_items)
 #' }
 
+#' Get File Name
+#'
+#' @param file_path The path of the file
+#' @param folder_name The name of the folder
+#'
+#' @return The name of the file(s)
+#'
+#' @noRd
+get_file_name <- function(file_path = tere::get_file_storage_path(), folder_name)
+{
+  file_name <- fs::dir_ls(paste0(file_path, folder_name)) |>
+    stringr::word(start = -2, end = -1, sep = stringr::fixed("/")) |>
+    stringr::word(1, sep = stringr::fixed("."))
+
+  return(file_name)
+}
+
 #' Read Files
 #'
 #' @param file_name The name of the file
@@ -100,37 +117,19 @@ read_file <- function(file_name
   return(data)
 }
 
-#' Get File Name
-#'
-#' @param file_path The path of the file
-#' @param folder_name The name of the folder
-#'
-#' @return The name of the file(s)
-#'
-#' @noRd
-get_file_name <- function(file_path = tere::get_file_storage_path(), folder_name)
-{
-  file_name <- fs::dir_ls(paste0(file_path, folder_name)) |>
-    stringr::word(start = -2, end = -1, sep = stringr::fixed("/")) |>
-    stringr::word(1, sep = stringr::fixed("."))
-
-  return(file_name)
-}
-
 #' Get register data from ms lists
 #'
-#' @return
-#' @export
+#' @return A dataframe containing data from the Libraries Subscription Databases Register
 #'
-#' @examples
-get_data_ms_lists <- function()
+#' @noRd
+get_data_register <- function()
 {
-  data_ms_lists <- tere::get_list_items(
+  data_register <- tere::get_list_items(
     "ConnectedCommunitiesInsightsAnalysisTeam"
     , "Libraries Subscription Databases Register") |>
     janitor::clean_names()
 
-  return(data_ms_lists)
+  return(data_register)
 }
 
 #' Prepare subscription database information table
@@ -140,9 +139,9 @@ get_data_ms_lists <- function()
 #' @noRd
 prepare_subscription_database_info <- function()
 {
-  data_ms_lists <- get_data_ms_lists()
+  data_register <- get_data_register()
 
-  subscription_database_info <- data_ms_lists |>
+  subscription_database_info <- data_register |>
     dplyr::select(
       sierra_record_number
       , database_name = title
@@ -163,9 +162,9 @@ prepare_subscription_database_info <- function()
 #' @noRd
 prepare_subscription_database_price <- function()
 {
-  data_ms_lists <- get_data_ms_lists()
+  data_register <- get_data_register()
 
-  subscription_database_price <- data_ms_lists |>
+  subscription_database_price <- data_register |>
     dplyr::select(
       sierra_record_number
       , price_type

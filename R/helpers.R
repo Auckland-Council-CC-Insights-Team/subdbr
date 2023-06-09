@@ -133,6 +133,7 @@ read_file <- function(file_name
 #' Get register data from ms lists
 #'
 #' @return A dataframe containing data from the Libraries Subscription Databases Register
+#' @export
 #'
 #' @noRd
 get_data_register <- function()
@@ -148,6 +149,7 @@ get_data_register <- function()
 #' Prepare subscription database information table
 #'
 #' @return A dataframe used for producing a file for reporting
+#' @export
 #'
 #' @noRd
 prepare_subscription_database_info <- function()
@@ -171,6 +173,7 @@ prepare_subscription_database_info <- function()
 #' Prepare subscription database price table
 #'
 #' @return A dataframe used for producing a file for reporting
+#' @export
 #'
 #' @noRd
 prepare_subscription_database_price <- function()
@@ -194,6 +197,7 @@ prepare_subscription_database_price <- function()
 #' @param file_path The path of the file
 #'
 #' @return A dataframe containing all beamafilm data
+#' @export
 #'
 #' @noRd
 prepare_beamafilm <- function(file_path = paste0(tere::get_file_storage_path(), "/subscription_database"))
@@ -229,6 +233,7 @@ prepare_beamafilm <- function(file_path = paste0(tere::get_file_storage_path(), 
 #' @param file_path The path of the file
 #'
 #' @return A dataframe containing all discovery national archives data
+#' @export
 #'
 #' @noRd
 prepare_discovery_national_archives <- function(file_path = paste0(tere::get_file_storage_path(), "/subscription_database"))
@@ -263,6 +268,7 @@ prepare_discovery_national_archives <- function(file_path = paste0(tere::get_fil
 #' @param file_path The path of the file
 #'
 #' @return A dataframe containing all linked in learning data
+#' @export
 #'
 #' @noRd
 prepare_linked_in_learning <- function(file_path = paste0(tere::get_file_storage_path(), "/subscription_database"))
@@ -316,6 +322,7 @@ prepare_linked_in_learning <- function(file_path = paste0(tere::get_file_storage
 #' Prepare integrated dataset
 #'
 #' @return A dataframe containing datasets from all data sources
+#' @export
 #'
 #' @noRd
 prepare_integrated_dataset <- function()
@@ -342,6 +349,7 @@ prepare_integrated_dataset <- function()
 #' Create dataframe all
 #'
 #' @return A list of dataframes required to prepare other dataframes and files
+#' @export
 #'
 #' @noRd
 create_dataframe_all <- function()

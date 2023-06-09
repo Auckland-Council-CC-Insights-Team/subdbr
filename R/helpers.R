@@ -383,8 +383,13 @@ create_dataframe_all <- function()
 {
   dataframe_list <- create_dataframe_all()
 
-  readr::write_csv(dataframe_list[[3]], "subscription_database_info.csv")
-  readr::write_csv(dataframe_list[[4]], "subscription_database_price.csv")
-  readr::write_csv(dataframe_list[[5]], "subscription_database_metric.csv")
+  # readr::write_csv(dataframe_list[[3]], "subscription_database_info.csv")
+  # readr::write_csv(dataframe_list[[4]], "subscription_database_price.csv")
+  # readr::write_csv(dataframe_list[[5]], "subscription_database_metric.csv")
+
+  # temp without alias dataframe
+  readr::write_csv(dataframe_list[[2]], "subscription_database_info.csv")
+  readr::write_csv(dataframe_list[[3]], "subscription_database_price.csv")
+  readr::write_csv(dataframe_list[[4]], "subscription_database_metric.csv")
 
 }

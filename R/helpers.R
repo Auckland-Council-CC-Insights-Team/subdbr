@@ -355,14 +355,14 @@ prepare_integrated_dataset <- function()
 create_dataframe_all <- function()
 {
   data_register <- get_data_register()
-  data_alias_table <- get_data_alias_table()
+  # data_alias_table <- get_data_alias_table()
   subscription_database_info <- prepare_subscription_database_info()
   subscription_database_price <- prepare_subscription_database_price()
   integrated_dataset <- prepare_integrated_dataset()
 
   dataframe_list <- list(
     data_register
-    , data_alias_table
+    # , data_alias_table
     , subscription_database_info
     , subscription_database_price
     , integrated_dataset

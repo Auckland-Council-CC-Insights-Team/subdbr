@@ -338,3 +338,44 @@ prepare_integrated_dataset <- function()
 
   return(integrated_dataset)
 }
+
+#' Create dataframe all
+#'
+#' @return A list of dataframes required to prepare other dataframes and files
+#'
+#' @noRd
+create_dataframe_all <- function()
+{
+  data_register <- get_data_register()
+  data_alias_table <- get_data_alias_table()
+  subscription_database_info <- prepare_subscription_database_info()
+  subscription_database_price <- prepare_subscription_database_price()
+  integrated_dataset <- prepare_integrated_dataset()
+
+  dataframe_list <- list(
+    data_register
+    , data_alias_table
+    , subscription_database_info
+    , subscription_database_price
+    , integrated_dataset
+  )
+
+  return(dataframe_list)
+
+}
+
+
+#' Write file all
+#'
+#' @description Writes all files required for subscription database reporting
+#'
+#' @noRd
+write_file_all <- function()
+{
+  dataframe_list <- create_dataframe_all()
+
+  readr::write_csv(dataframe_list[[3]], "subscription_database_info.csv")
+  readr::write_csv(dataframe_list[[4]], "subscription_database_price.csv")
+  readr::write_csv(dataframe_list[[5]], "subscription_database_metric.csv")
+
+}

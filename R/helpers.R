@@ -368,9 +368,10 @@ create_dataframe_all <- function()
 #' Write file all
 #'
 #' @description Writes all files required for subscription database reporting
+#' @export
 #'
 #' @noRd
-write_file_all <- function()
+  write_file_all <- function()
 {
   dataframe_list <- create_dataframe_all()
 

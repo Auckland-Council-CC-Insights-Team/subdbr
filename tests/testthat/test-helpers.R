@@ -26,7 +26,7 @@ test_that("able to get file name", {
 })
 
 test_that("able to complete prepare data for beamafilm", {
-  file_path <-test_path("testdata")
+  file_path <- test_path("testdata")
 
   expect_equal(
     prepare_beamafilm(file_path) |>
@@ -35,9 +35,19 @@ test_that("able to complete prepare data for beamafilm", {
   )
 })
 
+test_that("able to complete prepare data for discovery_national_archives", {
+  file_path <- test_path("testdata")
+
+  expect_equal(
+    prepare_discovery_national_archives(file_path) |>
+      nrow()
+    , 12
+  )
+})
+
 #TODO figure out why 2 rows were returned instead of 1
 test_that("able to complete prepare data for linked_in_learning", {
-  file_path <-test_path("testdata")
+  file_path <- test_path("testdata")
 
   expect_equal(
     prepare_linked_in_learning(file_path) |>

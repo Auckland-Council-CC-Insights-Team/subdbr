@@ -42,7 +42,6 @@ beamafilm <- dplyr::tibble(
   , "Renewal Date" = as.Date("2021-02-28")
 )
 
-
 linked_in_learning <- dplyr::tibble(
   "Start Day (PST/PDT)" = "2022-02-28"
   , "End Day (PST/PDT)" = "2022-03-31"
@@ -61,19 +60,32 @@ linked_in_learning <- dplyr::tibble(
   , "Document Completions" = 13
 )
 
+discovery_national_archives <- dplyr::tibble(
+  "Customer" = rep("Auckland Council", 12)
+  , "Resource" = rep("Discovery", 12)
+  , "Year" = rep("2022", 12)
+  , "Month" = month.name
+  , "Click" = round(runif(12, min = 1000, max = 20000))
+  , "Renewal Date" = as.Date("2021-02-28")
+)
+
 # assign data frames to a list
 
-test_data_excel <- list(beamafilm)
+test_data_excel <- list(
+  beamafilm
+  , discovery_national_archives
+  )
 
 test_data_csv <- list(linked_in_learning)
 
 # assign files to a vector
 
-file_name_excel <- c("beamafilm")
+file_name_excel <- c(
+  "beamafilm"
+  , "discovery_national_archives"
+  )
 
 file_name_csv <- c("linked_in_learning")
-
-#-
 
 purrr::map2(
   .x = test_data_excel,

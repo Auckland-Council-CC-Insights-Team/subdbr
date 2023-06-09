@@ -196,7 +196,7 @@ prepare_subscription_database_price <- function()
 #' @return A dataframe containing all beamafilm data
 #'
 #' @noRd
-prepare_beamafilm <- function(file_path = tere::get_file_storage_path())
+prepare_beamafilm <- function(file_path = paste0(tere::get_file_storage_path(), "/subscription_database"))
 {
   file_name_beamafilm <- get_file_name(file_path, "/beamafilm")
 
@@ -231,7 +231,7 @@ prepare_beamafilm <- function(file_path = tere::get_file_storage_path())
 #' @return A dataframe containing all discovery national archives data
 #'
 #' @noRd
-prepare_discovery_national_archives <- function(file_path = tere::get_file_storage_path())
+prepare_discovery_national_archives <- function(file_path = paste0(tere::get_file_storage_path(), "/subscription_database"))
 {
   file_name_discovery_national_archives <- get_file_name(file_path, "/discovery_national_archives")
 
@@ -265,7 +265,7 @@ prepare_discovery_national_archives <- function(file_path = tere::get_file_stora
 #' @return A dataframe containing all linked in learning data
 #'
 #' @noRd
-prepare_linked_in_learning <- function(file_path = tere::get_file_storage_path())
+prepare_linked_in_learning <- function(file_path = paste0(tere::get_file_storage_path(), "/subscription_database"))
 {
   file_name_linked_in_learning <- get_file_name(file_path, "/linked_in_learning")
 

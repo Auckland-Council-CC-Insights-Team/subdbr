@@ -82,6 +82,7 @@ get_file_name <- function(file_path = tere::get_file_storage_path(), folder_name
 #' @param file_path The path of the file
 #' @param file_type The format of the file
 #' @param sheet The sheet number in the excel file. Defaults to the first sheet
+#' @param skip The number of rows to skip before reading in the data
 #'
 #' @return Data from the file(s)
 #'
@@ -89,7 +90,8 @@ get_file_name <- function(file_path = tere::get_file_storage_path(), folder_name
 read_file <- function(file_name
                       , file_path = tere::get_file_storage_path()
                       , file_type = c("excel", "csv", "txt")
-                      , sheet = 1)
+                      , sheet = 1
+                      , skip = 0)
 {
   if(file_type == "excel")
   {
@@ -97,9 +99,14 @@ read_file <- function(file_name
       .x = file_name
       , .f = ~tere::get_excel_file(filename = .x
                                    , path = file_path
-                                   , sheet = sheet)
-    ) |>
-      purrr::list_rbind()
+                                   , sheet = sheet
+                                   , skip_rows = skip)
+    )
+
+    names(data) <- file_name
+
+    data_with_names <- data |>
+      purrr::list_rbind(names_to = "id")
   }
 
   if(file_type == "csv")
@@ -108,13 +115,19 @@ read_file <- function(file_name
       .x = paste0(file_path, "/", file_name, ".csv")
       , .f = ~readr::read_delim(file = .x
                                 , delim = ","
-                                , col_types = "?")
-    ) |>
-      purrr::list_rbind() |>
+                                , col_types = "?"
+                                , skip = skip)
+      , .id = "file_name"
+    )
+
+    names(data) <- file_name
+
+    data_with_names <- data |>
+      purrr::list_rbind(names_to = "id") |>
       janitor::clean_names()
   }
 
-  return(data)
+  return(data_with_names)
 }
 
 #' Get register data from ms lists

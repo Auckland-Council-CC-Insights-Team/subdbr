@@ -7,7 +7,7 @@ save_file_excel <- function(test_data, file_name)
                       , "/"
                       , file_name)
 
-  dir.create(file_path)
+  dir.create(file_path, showWarnings = FALSE)
 
   writexl::write_xlsx(test_data, path = paste0(file_path, "/", file_name, ".xlsx"))
 
@@ -22,7 +22,7 @@ save_file_csv <- function(test_data, file_name)
                       , "/"
                       , file_name)
 
-  dir.create(file_path)
+  dir.create(file_path, showWarnings = FALSE)
 
   readr::write_csv(test_data, path = paste0(file_path, "/", file_name, ".csv"))
 

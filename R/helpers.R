@@ -90,6 +90,7 @@ get_file_name <- function(file_path = tere::get_file_storage_path(), folder_name
 read_file <- function(file_name
                       , file_path = tere::get_file_storage_path()
                       , file_type = c("excel", "csv", "txt")
+                      , file_extension = c(".xlsx", ".xls", ".csv")
                       , sheet = 1
                       , skip = 0)
 {
@@ -99,6 +100,7 @@ read_file <- function(file_name
       .x = file_name
       , .f = ~tere::get_excel_file(filename = .x
                                    , path = file_path
+                                   , file_extension = file_extension
                                    , sheet = sheet
                                    , skip_rows = skip)
     )
@@ -112,7 +114,7 @@ read_file <- function(file_name
   if(file_type == "csv")
   {
     data <- purrr::map(
-      .x = paste0(file_path, "/", file_name, ".csv")
+      .x = paste0(file_path, "/", file_name, file_extension)
       , .f = ~readr::read_delim(file = .x
                                 , delim = ","
                                 , col_types = "?"
@@ -208,6 +210,7 @@ prepare_beamafilm <- function(file_path = paste0(tere::get_file_storage_path(), 
     file_name = file_name_beamafilm
     , file_path = file_path
     , file_type = "excel"
+    , file_extension = ".xlsx"
     )
 
   clean_beamafilm <- data_beamafilm |>
@@ -244,6 +247,7 @@ prepare_discovery_national_archives <- function(file_path = paste0(tere::get_fil
     file_name = file_name_discovery_national_archives
     , file_path = file_path
     , file_type = "excel"
+    , file_extension = ".xlsx"
   )
 
   clean_discovery_national_archives <- data_discovery_national_archives |>
@@ -279,6 +283,7 @@ prepare_linked_in_learning <- function(file_path = paste0(tere::get_file_storage
     file_name = file_name_linked_in_learning
     , file_path = file_path
     , file_type = "csv"
+    , file_extension = ".csv"
   )
 
   #TODO figure out to handle old column name courses_viewed in oldest files

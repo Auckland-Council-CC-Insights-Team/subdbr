@@ -129,6 +129,23 @@ read_file <- function(file_name
       janitor::clean_names()
   }
 
+  if(file_type == "tsv")
+  {
+    data <- purrr::map(
+      .x = paste0(file_path, "/", file_name, file_extension)
+      , .f = ~readr::read_tsv(file = .x
+                              , col_types = "?"
+                              , skip = skip)
+      , .id = "file_name"
+    )
+
+    names(data) <- file_name
+
+    data_with_names <- data |>
+      purrr::list_rbind(names_to = "id") |>
+      janitor::clean_names()
+  }
+
   return(data_with_names)
 }
 

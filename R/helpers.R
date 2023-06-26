@@ -165,6 +165,30 @@ get_data_register <- function()
   return(data_register)
 }
 
+
+#' Get alias table data from ms lists
+#'
+#' @return A dataframe containing data from the alias table
+#' @export
+#'
+#' @noRd
+get_data_alias_table <- function()
+{
+  data_alias_table <- tere::get_list_items(
+    "ConnectedCommunitiesInsightsAnalysisTeam"
+    , "subscription_database_alias_table") |>
+    janitor::clean_names()|>
+    dplyr::select(
+      source_database_name
+      , clean_database_name
+      , register_database_name
+      , sierra_record_number
+      , source
+    )
+
+  return(data_alias_table)
+}
+
 #' Prepare subscription database information table
 #'
 #' @return A dataframe used for producing a file for reporting
@@ -434,13 +458,13 @@ prepare_integrated_dataset <- function()
 
   clean_discovery_national_archives <- prepare_discovery_national_archives()
 
-  # clean_form_metric <- prepare_form_metric()
+  clean_form_metric <- prepare_form_metric()
 
   integrated_dataset <- dplyr::bind_rows(
     clean_linked_in_learning
     , clean_beamafilm
     , clean_discovery_national_archives
-    # , clean_form_metric
+    , clean_form_metric
   )
 
   return(integrated_dataset)
@@ -455,14 +479,14 @@ prepare_integrated_dataset <- function()
 create_dataframe_all <- function()
 {
   data_register <- get_data_register()
-  # data_alias_table <- get_data_alias_table()
+  data_alias_table <- get_data_alias_table()
   subscription_database_info <- prepare_subscription_database_info()
   subscription_database_price <- prepare_subscription_database_price()
   integrated_dataset <- prepare_integrated_dataset()
 
   dataframe_list <- list(
     data_register
-    # , data_alias_table
+    , data_alias_table
     , subscription_database_info
     , subscription_database_price
     , integrated_dataset
@@ -483,13 +507,13 @@ create_dataframe_all <- function()
 {
   dataframe_list <- create_dataframe_all()
 
-  # readr::write_csv(dataframe_list[[3]], "subscription_database_info.csv")
-  # readr::write_csv(dataframe_list[[4]], "subscription_database_price.csv")
-  # readr::write_csv(dataframe_list[[5]], "subscription_database_metric.csv")
+  readr::write_csv(dataframe_list[[3]], "subscription_database_info.csv")
+  readr::write_csv(dataframe_list[[4]], "subscription_database_price.csv")
+  readr::write_csv(dataframe_list[[5]], "subscription_database_metric.csv")
 
   # temp without alias dataframe
-  readr::write_csv(dataframe_list[[2]], "subscription_database_info.csv")
-  readr::write_csv(dataframe_list[[3]], "subscription_database_price.csv")
-  readr::write_csv(dataframe_list[[4]], "subscription_database_metric.csv")
+  # readr::write_csv(dataframe_list[[2]], "subscription_database_info.csv")
+  # readr::write_csv(dataframe_list[[3]], "subscription_database_price.csv")
+  # readr::write_csv(dataframe_list[[4]], "subscription_database_metric.csv")
 
 }

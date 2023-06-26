@@ -443,6 +443,69 @@ prepare_form_metric <- function(file_path = paste0(tere::get_file_storage_path()
 
   return(clean_form_metric)
 }
+
+
+#' Prepare pro_quest data
+#'
+#' @param file_path The path of the file
+#'
+#' @return A dataframe containing all pro_quest data
+#' @export
+#'
+#' @noRd
+prepare_pro_quest <- function(file_path = paste0(tere::get_file_storage_path(), "/subscription_database"))
+{
+  file_name_pro_quest <- get_file_name(file_path, "/pro_quest")
+
+  data_pro_quest <- read_file(
+    file_name = file_name_pro_quest
+    , file_path = file_path
+    , file_type = "tsv"
+    , file_extension = ".tsv"
+    , skip = 13
+  )
+
+  data_alias_table <- get_data_alias_table()
+
+  clean_pro_quest <- data_pro_quest |>
+    dplyr::select(
+      database
+      , metric_name = metric_type
+      , value = reporting_period_total
+      , id
+    ) |>
+    dplyr::mutate(
+      clean_database_name = janitor::make_clean_names(database
+                                                      , allow_dupes = TRUE)
+      , reporting_period = lubridate::dmy(paste0("01", stringr::str_sub(id, start = -6, end = -1)))
+      , month = lubridate::month(reporting_period, label = TRUE, abbr = FALSE)
+      , year = lubridate::year(reporting_period)
+      , metric_name = dplyr::case_when(
+        metric_name == "Regular Searches" ~ "searches"
+        , metric_name == "Searches_Regular" ~ "searches"
+        , metric_name == "Total_Item_Requests" ~ "views"
+      )
+    ) |>
+    dplyr::left_join(data_alias_table
+                     , by = "clean_database_name"
+                     , multiple = "warning") |>
+    dplyr::select(
+      sierra_record_number
+      , reporting_period
+      , metric_name
+      , value
+      , month
+      , year
+      # , database # to be commented out later
+    ) |>
+    dplyr::filter(
+      sierra_record_number != "NA"
+      , !is.na(metric_name)
+      , !is.na(value))
+
+  return(clean_pro_quest)
+}
+
 #' Prepare integrated dataset
 #'
 #' @return A dataframe containing datasets from all data sources
@@ -460,11 +523,14 @@ prepare_integrated_dataset <- function()
 
   clean_form_metric <- prepare_form_metric()
 
+  clean_pro_quest <- prepare_pro_quest()
+
   integrated_dataset <- dplyr::bind_rows(
     clean_linked_in_learning
     , clean_beamafilm
     , clean_discovery_national_archives
     , clean_form_metric
+    , clean_pro_quest
   )
 
   return(integrated_dataset)

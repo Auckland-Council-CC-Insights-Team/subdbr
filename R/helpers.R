@@ -341,6 +341,84 @@ prepare_linked_in_learning <- function(file_path = paste0(tere::get_file_storage
 }
 
 
+#' Prepare form metric data
+#'
+#' @param file_path The path of the file
+#'
+#' @return A dataframe containing all form metric data
+#' @export
+#'
+#' @noRd
+prepare_form_metric <- function(file_path = paste0(tere::get_file_storage_path(), "/subscription_database"))
+{
+  file_name_form_metric <- get_file_name(file_path, "/form_metric")
+
+  data_form_metric <- read_file(
+    file_name = file_name_form_metric
+    , file_path = file_path
+    , file_type = "excel"
+    , file_extension = ".xlsx"
+    , sheet = "Form1"
+  )
+
+  data_alias_table <- get_data_alias_table()
+
+  clean_form_metric <- data_form_metric |>
+    dplyr::select(
+      database = please_choose_a_subscription_database
+      , reporting_period = please_select_the_start_of_the_month_youre_providing_data_for_e_g_1_3_2020_for_march_2020
+      , searches = how_many_searches_were_recorded
+      , views = how_many_views_were_recorded
+      , turnaways = how_many_turnaways_were_recorded
+      , sessions = how_many_sessions_were_recorded
+    ) |>
+    dplyr::mutate(
+      clean_database_name = janitor::make_clean_names(database
+                                                      , allow_dupes = TRUE)
+      , reporting_period = as.Date(reporting_period)
+      , month = lubridate::month(reporting_period, label = TRUE, abbr = FALSE)
+      , year = lubridate::year(reporting_period)
+      , searches = as.double(searches)
+      , views = as.double(views)
+      , turnaways = as.double(turnaways)
+      , sessions = as.double(sessions)
+    ) |>
+    dplyr::left_join(data_alias_table
+                     , by = "clean_database_name"
+                     , multiple = "warning") |>
+    dplyr::select(
+      sierra_record_number
+      , reporting_period
+      , searches
+      , views
+      , turnaways
+      , sessions
+      , year
+      , month
+      # , database
+    ) |>
+    tidyr::pivot_longer(cols = c(
+      searches
+      , views
+      , turnaways
+      , sessions
+    )
+    , names_to = "metric_name"
+    , values_to = "value") |>
+    dplyr::select(
+      sierra_record_number
+      , reporting_period
+      , metric_name
+      , value
+      , month
+      , year
+    ) |>
+    dplyr::filter(
+      sierra_record_number != "NA"
+      , !is.na(value))
+
+  return(clean_form_metric)
+}
 #' Prepare integrated dataset
 #'
 #' @return A dataframe containing datasets from all data sources

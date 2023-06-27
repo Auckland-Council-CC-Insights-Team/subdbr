@@ -88,7 +88,7 @@ get_file_name <- function(file_path = tere::get_file_storage_path(), folder_name
 #'
 #' @noRd
 read_file <- function(file_name
-                      , file_path = tere::get_file_storage_path()
+                      , file_path = paste0(tere::get_file_storage_path(), "/subscription_database")
                       , file_type = c("excel", "csv", "txt")
                       , file_extension = c(".xlsx", ".xls", ".csv")
                       , sheet = 1
@@ -298,7 +298,7 @@ prepare_discovery_national_archives <- function(file_path = paste0(tere::get_fil
     dplyr::mutate(year = lubridate::year(reporting_period)) |>
     dplyr::mutate(metric_name = "Views") |>
     dplyr::mutate(value = click) |>
-    dplyr::mutate(sierra_record_number
+    dplyr::select(sierra_record_number
                   , reporting_period
                   , metric_name
                   , value

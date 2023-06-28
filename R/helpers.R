@@ -344,7 +344,7 @@ prepare_linked_in_learning <- function(file_path = paste0(tere::get_file_storage
       , values_to = "value") |>
     dplyr::mutate(
       sierra_record_number = "b31669840"
-      , reporting_period = lubridate::mdy(end_day_pst_pdt)
+      , reporting_period = lubridate::floor_date(lubridate::mdy(end_day_pst_pdt), "month")
       , month = lubridate::month(reporting_period, label = TRUE, abbr = FALSE)
       , year = lubridate::year(reporting_period)
       , metric_name = dplyr::case_when(
